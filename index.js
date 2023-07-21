@@ -29,7 +29,8 @@ let persons = [
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(cors());
-// app.use(morgan());
+app.use(express.static("build"));
+
 app.get("/", (req, res) => {
   console.log(`hi ${name}`);
 });
@@ -75,11 +76,6 @@ app.post("/api/persons", (req, res) => {
   persons.concat(person);
 
   res.status(200).json(body);
-  //   console.log(
-  //     morgan.token("type", function (req, res) {
-  //       return req.headers["content-type"];
-  //     })
-  //   );
 });
 
 const PORT = process.env.PORT || 3001;
