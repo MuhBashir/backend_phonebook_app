@@ -20,3 +20,7 @@ Content-Type: application/json
     "name": "Bashir",
     "number": "08104819331"
 }
+
+
+###
+PUT http://localhost:3001/api/persons/1

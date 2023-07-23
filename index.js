@@ -2,30 +2,10 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
+const uuid = require("uuid");
 const name = "Muhammad Bashir Ibrahim";
 
-let persons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
+let persons = [];
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(cors());
@@ -59,22 +39,22 @@ app.delete("/api/persons/:id", (req, res) => {
   res.status(200).json(person);
 });
 
-const genetetedId = () => {
-  return Math.floor(Math.random() * 1000000000000);
-};
-
 app.post("/api/persons", (req, res) => {
   const body = req.body;
   if (!body.name || !body.number) {
     return res.status(400).json({ error: "name or number can not be missing" });
-  } else if (persons.includes(body.name)) {
+  } else if (persons.find((person) => person.name === body.name)) {
     return res.status(400).json({ error: "name must be unique" });
   }
 
-  const person = { id: genetetedId(), name: body.name, number: body.number };
+  const person = { id: uuid.v4(), name: body.name, number: body.number };
+  persons = persons.concat(person);
+  res.status(200).json(person);
+});
 
-  persons.concat(person);
-
+app.put("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const body = req.body;
   res.status(200).json(body);
 });
 
